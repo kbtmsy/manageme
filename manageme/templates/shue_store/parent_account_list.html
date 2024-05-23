@@ -1,0 +1,64 @@
+{% extends 'shue_store/base.html' %}
+
+{% block title %}index{% endblock %}
+
+{% block content %}
+
+<div class="container" style="height:85vh">
+  <h1>Parent Account List</h1><br><br>
+
+    {% csrf_token %}
+
+    <div class="bg-light h-75" style="overflow-y:scroll;">
+      <table class="table table-bordered">
+        <thead class="sticky-top bg-white">
+          <th scope="col" style="width:300px;">Parent ID</th>
+          <th scope="col" style="width:200px;">Collect Date</th>
+					<th scope="col" style="width:150px; text-align:center;">
+          	<button 
+          		id="add-btn"
+          		class="btn btn-primary btn-sm"
+          		type="button"
+          		name="button">New Account</button>
+
+					</th>
+        </thead>
+        <tbody>
+          {% for item in object_list %}
+            <tr class="bg-light">
+              <td style="width:300px;">
+                  {{ item.parent_id }}
+              </td>
+              <td style="width:200px;">
+								{% if item.collection_date == None %}
+								{% else %}
+									{{ item.collection_date }}
+								{% endif %}
+              </td>
+							<td style="width:150px; text-align:center;">
+								<a 
+									id="delete-btn{{ forloop.counter0 }}"
+									class="btn btn-danger btn-sm delete-btn" 
+									href="{% url 'parent-delete' item.parent_id %}"
+									type="button">Delete</a>
+							</td>
+            </tr>
+
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block extrascripts %}
+  <script type="text/javascript">
+      $(function () {
+          // add
+          $("#add-btn").modalForm({
+            formURL: "{% url 'parent-add' %}"
+          });
+      });
+  </script>
+{% endblock extrascripts %}

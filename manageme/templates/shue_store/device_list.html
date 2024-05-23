@@ -1,0 +1,72 @@
+{% extends 'shue_store/base.html' %}
+
+{% block title %}index{% endblock %}
+
+{% block content %}
+
+<div class="container" style="height:85vh">
+  <h1>Device List</h1><br><br>
+
+    {% csrf_token %}
+
+    <div class="bg-light h-75" style="overflow-y:scroll;">
+      <table class="table table-bordered">
+        <thead class="sticky-top bg-white">
+          <th scope="col">Device ID</th>
+          <th scope="col">Instagram ID</th>
+          <th scope="col">Preparation</th>
+					<th scope="col">Max</th>
+					<th scope="col" style="width:150px; text-align:center;">
+          	<button 
+          		id="add-btn"
+          		class="btn btn-primary btn-sm"
+          		type="button"
+          		name="button">New Device</button>
+
+					</th>
+        </thead>
+        <tbody>
+          {% for item in object_list %}
+            <tr class="bg-light">
+              <td>
+                  {{ item.device_id }}
+              </td>
+              <td>
+                  {{ item.instagram_id }}
+              </td>
+              <td>
+								{% if item.preparation_flg == 1 %}
+									Preparation
+								{% endif %}
+              </td>
+              <td>
+                  {{ item.max_follow_count }}
+             </td>
+
+							<td style="width:150px; text-align:center;">
+								<a 
+									id="delete-btn{{ forloop.counter0 }}"
+									class="btn btn-danger btn-sm delete-btn" 
+									href="{% url 'device-delete' item.device_id %}"
+									type="button">Delete</a>
+							</td>
+            </tr>
+
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block extrascripts %}
+  <script type="text/javascript">
+      $(function () {
+          // add
+          $("#add-btn").modalForm({
+            formURL: "{% url 'device-add' %}"
+          });
+      });
+  </script>
+{% endblock extrascripts %}

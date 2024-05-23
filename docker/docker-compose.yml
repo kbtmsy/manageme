@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  postgresql:
+    container_name: postgresql
+    image: postgres:15.4
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgresql/init:/docker-entrypoint-initdb.d
+      - ./postgresql/dbdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: footprints
+      POSTGRES_USER: fpuser
+      POSTGRES_PASSWORD: fppassword
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fpuser -d footprints"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web:
+    container_name: web
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+    working_dir: '/root/manageme/'
+    volumes: 
+      - ../manageme/:/root/manageme/
+    # command: poetry run python manage.py runserver 0:8000
+    command: bash
+    tty: true
+    ports: 
+      - 8000:8000
+    depends_on:
+      postgresql:
+        condition: service_healthy

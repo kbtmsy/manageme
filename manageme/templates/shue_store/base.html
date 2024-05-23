@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+	<head>
+	  <!-- Required meta tags -->
+	  <meta charset="UTF-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  {% block meta %}{% endblock %}
+	
+	  {% block stylesheets %}
+	    <!-- Bootstrap CSS -->
+	    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+	    <!-- Font awesome CSS -->
+	    <link rel="stylesheet" href="{% static 'assets/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+	  {% endblock stylesheets %}
+	
+	  {% block csslink %}{% endblock %}
+	
+	  <title>{% block title %}{% endblock %}</title>
+	  <title>Document</title>
+
+	</head>
+	
+	<body style="height:100vh;">
+		{% include "_modal.html" %}
+
+		<!-- head -->
+	  <header class="mb-4">
+	    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+				<a href="{% url 'index' %}"
+	    	<h1 class="navbar-brand">ShueStore</h1>
+ 			  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+ 			   	<ul class="navbar-nav mr-auto">
+						<li class="nav-item dropdown">
+       			  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Menu
+       			  </a>
+				        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" href="{% url 'device' %}">Device</a>
+				          <a class="dropdown-item" href="{% url 'parent' %}">Parent</a>
+				        </div>
+						</li>
+					</ul>
+				</div>
+				<div>
+					<a href="/accounts/logout/">ログアウト</a>
+				</div>
+	    </nav>
+		
+	  </header>
+	
+	  <main class="mb-5">
+			<!-- message area -->
+			<div id="message-area" class="container">
+				{% for message in messages %}
+					<div 
+						class="alert 
+									 {% if message.tags %} alert-{{ message.tags }}{% endif %}
+									 alert-dismissible fade show" 
+						role="alert">
+						<div>{{ message }}</div>
+					 	<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					</div>
+	
+				{% endfor %}
+			</div>
+			<div id="main-area">
+	    	{% block content %}{% endblock %}
+			</div>
+	  </main>
+	
+	  <footer class="fixed-bottom">
+	    <div class="container">
+	    </div>
+	  </footer>
+
+		<!-- JavaScript -->
+	  {% block scripts %}
+	  	<link rel="icon" href="data:,">
+	
+	    <script src="{% static 'assets/js/jquery-3.2.1.min.js' %}"></script>
+	    <script src="{% static 'assets/js/popper.min.js' %}"></script>
+	    <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+	    <!-- You can alternatively load the minified version -->
+	    <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+	  {% endblock scripts %}
+    {% block extrascripts %}{% endblock extrascripts %}
+
+	
+	</body>
+</html>
